@@ -1,7 +1,13 @@
-FROM openjdk:8-jre
-EXPOSE 8080 5005
-COPY ./target/sample-service-0.0.1-SNAPSHOT.jar /opt/target
-WORKDIR /opt/target
-ENV _JAVA_OPTIONS '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
+FROM openjdk:8u181-jre-alpine3.8
 
-CMD ["java", "-jar", "sample-service-0.0.1-SNAPSHOT.jar"]
+# No entrypoint set
+ENTRYPOINT []
+
+# Exposed default port
+EXPOSE 8080
+
+# Copy local folders to docker container
+COPY . /
+
+# Fix permissions on run-java.sh
+RUN chmod 0755 /opt/app/run-java.sh

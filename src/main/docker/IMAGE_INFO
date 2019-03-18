@@ -1,0 +1,13 @@
+
+#### image informations ####
+#
+# service-name:   greeting
+# description:    greeting service
+# company:        Smart InsurTech GmbH c/o Hypoport AG
+# git-repo:       ssh://git@bitbucket-ci-tools.apps.shift.smartinsurtech.de:30999/train/sample-springboot-service.git
+#
+# command:        /opt/app/run-java.sh
+#
+# mandatory environment variables:
+#
+
