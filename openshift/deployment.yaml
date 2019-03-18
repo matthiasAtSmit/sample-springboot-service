@@ -1,0 +1,64 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: greeting
+  name: greeting
+  namespace: training
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: registration
+    deploymentconfig: registration
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: registration
+        deploymentconfig: registration
+    spec:
+      containers:
+        - command:
+            - /opt/app/run-java.sh
+          image: >-
+            docker-registry.default.svc:5000/ci-tools/greeting:latest
+          imagePullPolicy: Always
+          name: greeting
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: deployer-dockercfg-zppck
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - greeting
+        from:
+          kind: ImageStreamTag
+          name: 'greeting:latest'
+          namespace: ci-tools
+        lastTriggeredImage: >-
+          docker-registry.default.svc:5000/ci-tools/greeting:latest
+      type: ImageChange
+    - type: ConfigChange
