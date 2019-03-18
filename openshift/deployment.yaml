@@ -6,27 +6,17 @@ metadata:
   name: greeting
   namespace: training
 spec:
-  replicas: 1
-  revisionHistoryLimit: 10
+  replicas: 4
   selector:
-    app: registration
-    deploymentconfig: registration
+    app: greeting
+    deploymentconfig: greeting
   strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
     type: Rolling
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: registration
-        deploymentconfig: registration
+        app: greeting
+        deploymentconfig: greeting
     spec:
       containers:
         - command:
@@ -62,3 +52,43 @@ spec:
           docker-registry.default.svc:5000/ci-tools/greeting:latest
       type: ImageChange
     - type: ConfigChange
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: greeting
+  name: greeting
+  namespace: training
+spec:
+  ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    deploymentconfig: greeting
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: greeting
+  name: greeting
+  namespace: training
+spec:
+  ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    deploymentconfig: greeting
+  sessionAffinity: None
+  type: ClusterIP
