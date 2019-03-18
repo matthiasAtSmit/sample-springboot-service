@@ -1,7 +1,7 @@
 ## Springboot Service ein Beispiel 
 
-### Deployment Umgebung kurz beschreiben
-   - Bitbucker als Quellcodeverwaltun
+### Deployment Umgebung 
+   - Bitbucket als Quellcodeverwaltung
    - Jenkins als Continuous Integration Server
    - SonarQube zur statischen Code-Analyse
    - Openshift als Container Platform 
@@ -11,7 +11,6 @@
    - Eingeplant
    - Entwicklung
    - Codereview
-   - Release
    - Test
    - Ak-Test
    - Fertig
@@ -25,3 +24,16 @@
      - Generierung des Quellcodes für die Api beim Kompilieren
    - Jenkinsfile
    - Dockerfile
+   
+### Deployment im Openshift
+##### Erstellen von DeploymentConfig, Service, ReplicationController und der Route
+oc create -f openshift/deployment.yaml
+
+#### Löschen aller Services im Projekt
+oc delete all --all
+
+#### Anzeigen aller Pods oder aller Resourcen
+oc get po
+oc get all
+watch oc get all 
+
